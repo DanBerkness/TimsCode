@@ -7,5 +7,5 @@ public class SuperUser extends User {
 		this.setPassword(password);
 		this.setName(name);
 
-}
+	}
 }

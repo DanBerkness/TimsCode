@@ -1,49 +1,43 @@
 package com.coderscampus;
 
-	import java.io.BufferedReader;
-	import java.io.FileNotFoundException;
-	import java.io.FileReader;
-	import java.io.IOException;
+public class FileService extends UserLoginApplication {
 
-	public class FileService {
-
-		public static User[] populateUsersFromFile(String filePath) {
-			User[] users = null;
-			BufferedReader br = null;
-			try {
-				try {
-					br = new BufferedReader(new FileReader(filePath));
-				} catch (FileNotFoundException e) {
-					System.out.println("File not found.");
-					e.printStackTrace();
-				}
-
-				users = new User[50];
-				String line = null;
-				int i = 0;
-				try {
-					while ((line = br.readLine()) != null) {
-						users[i] = new User();
-						i++;
-
-					}
-				} catch (IOException e) {
-					System.out.println("Oops, there was an I/O Exception");
-					e.printStackTrace();
-				}
-			} finally {
-				if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						System.out.println("Wow another I/O Exception");
-						e.printStackTrace();
-					}
-			}
-
-			return users;
-		}
+	public static String userUsernameToUpdate() {
+		System.out.println("Which user would you like to login as? (Type in a valid username)");
+		String usernameToUpdate = scanner.nextLine();
+		return usernameToUpdate;
 	}
 
+	public static void userUpdateName(User loggedInUser) {
+		System.out.println("Please type in your new name: ");
+		String name = scanner.nextLine();
+		loggedInUser.setName(name);
+	}
 
+	public static void usertUpdatePassword(User loggedInUser) {
+		System.out.println("Please type in your new password: ");
+		String password = scanner.nextLine();
+		loggedInUser.setPassword(password);
+	}
 
+	public static void userUpdateUsername(User loggedInUser) {
+		System.out.println("Please type in your new username: ");
+		String username = scanner.nextLine();
+		loggedInUser.setUsername(username);
+	}
+
+	public static int userCheckList(User loggedInUser) {
+		System.out.println("----------");
+		System.out.println("Please choose from the following options:");
+		if (loggedInUser instanceof SuperUser) {
+			System.out.println("(0) Log in as another user ");
+		}
+		System.out.println("(1) Update username");
+		System.out.println("(2) Update password");
+		System.out.println("(3) Update name");
+		System.out.println("(4) Exit");
+		String option = scanner.nextLine();
+
+		return Integer.parseInt(option);
+	}
+}
