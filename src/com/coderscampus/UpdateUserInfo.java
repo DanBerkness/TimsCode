@@ -2,11 +2,19 @@ package com.coderscampus;
 
 public abstract class UpdateUserInfo {
 	
-	// Create method or methods to update UserInfo to be sorted as normal User or Super User when logged in
+	// Create methods to update UserInfo to be sorted as normal User or Super User when logged in
+	
+//	   promptUsernameToUpdate();
+//	   promptUpdateName();
+//	   promptUpdateUsername();
+//	   promptUpdatePassword();
+//	   promptUpdateUsername();
+//	   promptOptions();
+	   
 
 	//  When logged in as a Normal User, you should be able to update any of the
 	// fields that belong to this user instance
-	// except the role
+	// except the rol
 	// should be prompted with option to update username, password, or name
 
 	// User updates should output this information back to users.txt file and
