@@ -1,43 +1,69 @@
 package com.coderscampus;
 
-public class FileService extends UserLoginApplication {
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 
-	public static String userUsernameToUpdate() {
-		System.out.println("Which user would you like to login as? (Type in a valid username)");
-		String usernameToUpdate = scanner.nextLine();
-		return usernameToUpdate;
-	}
 
-	public static void userUpdateName(User loggedInUser) {
-		System.out.println("Please type in your new name: ");
-		String name = scanner.nextLine();
-		loggedInUser.setName(name);
-	}
+public class FileService extends UserService implements FileReaderService {
 
-	public static void usertUpdatePassword(User loggedInUser) {
-		System.out.println("Please type in your new password: ");
-		String password = scanner.nextLine();
-		loggedInUser.setPassword(password);
-	}
+	public static User[] sortUsersFromFile(String filePath) {
+		User[] users = null;
+		BufferedReader br = null;
+		try {
+			try {
+				br = new BufferedReader(new FileReader(filePath));
+			} catch (FileNotFoundException e) {
+				System.out.println("File not found.");
+				e.printStackTrace();
+			}
 
-	public static void userUpdateUsername(User loggedInUser) {
-		System.out.println("Please type in your new username: ");
-		String username = scanner.nextLine();
-		loggedInUser.setUsername(username);
-	}
+			users = new User[21];
+			String line = null;
+			int i = 0;
+			try {
+				while ((line = br.readLine()) != null) {
+//					users[i] = new User(line.split(","));
+					i++;
 
-	public static int userCheckList(User loggedInUser) {
-		System.out.println("----------");
-		System.out.println("Please choose from the following options:");
-		if (loggedInUser instanceof SuperUser) {
-			System.out.println("(0) Log in as another user ");
+				}
+			} catch (IOException e) {
+				System.out.println("Oops, there was an I/O Exception");
+				e.printStackTrace();
+			}
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					System.out.println("Wow another I/O Exception");
+					e.printStackTrace();
+				}
 		}
-		System.out.println("(1) Update username");
-		System.out.println("(2) Update password");
-		System.out.println("(3) Update name");
-		System.out.println("(4) Exit");
-		String option = scanner.nextLine();
 
-		return Integer.parseInt(option);
+		return users;
+	}
+
+	@Override
+	public String readLine(File file) throws IOException {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			return reader.readLine();
+		} finally {
+			if (reader != null)
+				reader.close();
+
+		}
+	}
+
+	@Override
+	public void writeLine(File file, String line) {
+		
 	}
 }

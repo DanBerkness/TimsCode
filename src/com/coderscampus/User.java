@@ -1,5 +1,9 @@
 package com.coderscampus;
+                                       
+// Adding an additional field to User Object to include "role" add as well
+// username, password, and name.
 
+//                          Sort super users before normal users
 public class User implements Comparable<User> {
 
 	private String username;
@@ -48,7 +52,7 @@ public class User implements Comparable<User> {
 	public int compareTo(User that) {
 		if (this.role.equals(that.role)) {
 			return -1;
-		} else if (this.password.equals(that.password)) {
+		} else if (this.username.equals(that.username)) {
 			return 0;
 		} else {
 			return 1;

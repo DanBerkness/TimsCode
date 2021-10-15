@@ -2,10 +2,8 @@ package com.coderscampus;
 
 public class UserService {
 
-	public static User[] users = new User[21];
-
-	public User userVerified(String username, String password) {
-		for (User user : UserService.users) {
+	public User getVerifiedUser(String username, String password) {
+		for (User user : UserLoginApplication.users) {
 			if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
 				return user;
 			}
@@ -13,19 +11,20 @@ public class UserService {
 		return null;
 	}
 
-	public User[] getUsers() {
-		return users;
-	}
-
-	public void setUsers(User[] users) {
-		UserService.users = users;
-	}
-
-	public User getUserByUsername(String usernameToUpdate) {
+	public User getUserByUsername(String username) {
+		for (User user : UserLoginApplication.users) {
+			if (user.getUsername().equalsIgnoreCase(username)) {
+				return user;
+			}
+		}
 		return null;
 	}
 
 	public String getUserInfo(User user) {
 		return user.getUsername() + ", " + user.getPassword() + ", " + user.getName() + ", " + user.getRole() + "\n";
+	}
+
+	public void getUserInfo(User[] sortUsersFromFile) {
+		
 	}
 }
