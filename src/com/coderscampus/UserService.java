@@ -23,8 +23,4 @@ public class UserService {
 	public String getUserInfo(User user) {
 		return user.getUsername() + ", " + user.getPassword() + ", " + user.getName() + ", " + user.getRole() + "\n";
 	}
-
-	public void getUserInfo(User[] sortUsersFromFile) {
-		
-	}
 }

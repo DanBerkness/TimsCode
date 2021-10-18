@@ -1,5 +1,5 @@
 package com.coderscampus;
-                                       
+
 // Adding an additional field to User Object to include "role" add as well
 // username, password, and name.
 

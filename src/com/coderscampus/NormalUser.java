@@ -2,7 +2,7 @@ package com.coderscampus;
 
 public class NormalUser extends User {
 
-	// 3) The role assignement to a User will be either: normal_user or super_user
+	// The role assignement to a User will be either: normal_user or super_user
 
 	public NormalUser(String username, String password, String name) {
 		this.role = "normal_user";
