@@ -16,7 +16,7 @@ public class UserLoginApplication extends FileUtilities {
 	static Scanner scanner = new Scanner(System.in);
 	public static User[] users = new User[21];
 
-	//  Extending the functionality of Assignment #3
+	// Extending the functionality of Assignment #3
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = null;
