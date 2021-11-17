@@ -2,17 +2,16 @@ package com.coderscampus;
 
 import java.util.Scanner;
 
-public class UserApp {
+public class UserApp { 
 
 	public static User[] users = new User[21];
 	private static UserService userService = new UserService();
 	static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		
-		userService.setUsers(FileService.populateUsersFromFile("users.txt"));
+
+		userService.setUsers(UserFileInput.populateUsersFromFile("users.txt"));
 		Scanner scanner = null;
-		
 
 		try {
 			scanner = new Scanner(System.in);
@@ -25,9 +24,7 @@ public class UserApp {
 				String username = scanner.nextLine();
 				System.out.println("Enter your password: ");
 				String password = scanner.nextLine();
-				
-			
-				
+
 				User currentUser = userService.getVerifiedUser(username, password);
 				if (currentUser != null) {
 					System.out.println("Welcome: " + currentUser.getName());

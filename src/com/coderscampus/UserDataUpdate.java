@@ -1,6 +1,7 @@
 package com.coderscampus;
 
-public interface UserDataInput {
+public interface UserDataUpdate {
+
 	String promptUsernameToUpdate();
 
 	void promptUpdateName(User currentUser);
@@ -10,5 +11,4 @@ public interface UserDataInput {
 	void promptUpdateUsername(User currentUser);
 
 	int promptOptions(User currentUser);
-
 }
