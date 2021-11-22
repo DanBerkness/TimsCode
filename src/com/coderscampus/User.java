@@ -41,6 +41,11 @@ public class User implements Comparable<User> {
 
 	public void setRole(String role) {
 		this.role = role;
+
+	}
+
+	public void setUsers(User[] populateUsersFromFile) {
+
 	}
 
 	@Override
@@ -59,4 +64,4 @@ public class User implements Comparable<User> {
 		}
 
 	}
-} 
+}

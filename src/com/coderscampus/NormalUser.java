@@ -10,4 +10,4 @@ public class NormalUser extends User {
 		this.setPassword(password);
 		this.setName(name);
 	}
-} 
+}
