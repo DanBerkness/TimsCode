@@ -1,99 +1,255 @@
 package com.coderscampus;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
-public class UserApp extends FileUtilities {   
+public class UserApp {
 
-	static UserService userService = new UserService();
-	static Scanner scanner = new Scanner(System.in);
-	public static User[] users = new User[21];
-
-	// Extending the functionality of Assignment #3
-
-	public static void main(String[] args) throws IOException {
-		BufferedReader reader = null;
-
-		try {
-			reader = new BufferedReader(new FileReader("users.txt"));
-
-			String line = null;
-			int i = 0;
-			while ((line = reader.readLine()) != null) {
-				String[] userInputs = line.split(", ");
-				if ("super_user".equals(userInputs[3])) {
-					users[i++] = new SuperUser(userInputs[0], userInputs[1], userInputs[2]);
-				} else {
-					users[i++] = new NormalUser(userInputs[0], userInputs[1], userInputs[2]);
+	public static void main(String[] args) throws FileNotFoundException {
+		List<User> loginID = new ArrayList<>();
+		Scanner scanner = new Scanner(new File("users.txt"));
+		while (scanner.hasNext()) {
+			String line = scanner.nextLine();
+			if (null != line && !line.trim().isEmpty()) {
+				String elements[] = line.split(",");
+				if (null != elements && elements.length >= 4) {
+					User dataInput = new User();
+					dataInput.username = elements[0].trim();
+					dataInput.password = elements[1].trim();
+					dataInput.name = elements[2].trim();
+					dataInput.role = elements[3].trim();
+					loginID.add(dataInput);
 				}
 			}
-
-		} finally {
-			if (reader != null)
-				reader.close();
 		}
+		scanner.close();
 
-		User currentUser = null;
+		scanner = new Scanner(System.in);
+
+		User verifiedLogin = null;
 		int userLogins = 1;
-		while (currentUser == null && userLogins < 5) {
-			System.out.println("Enter your email:");
-			String username = scanner.nextLine();
-			System.out.println("Enter your password: ");
-			String password = scanner.nextLine();
 
-			currentUser = userService.getVerifiedUser(username, password);
-			if (currentUser == null) {
+		while (verifiedLogin == null && userLogins < 5) {
+			System.out.println("Enter your email:");
+			String username = scanner.next();
+			System.out.println("Enter your password: ");
+			String password = scanner.next();
+			scanner.nextLine();
+
+			// this is my UserService Class
+			for (User input : loginID) {
+				if (input.username.equals(username) && input.password.equals(password)) {
+					verifiedLogin = input;
+					break;
+				}
+			}
+			if (null == verifiedLogin) {
 				System.out.println("Invalid login, please try again");
 				userLogins++;
 				if (userLogins >= 5) {
 					System.out.println("Too many failed login attempts, you are now locked out.");
-				}
-			}
-		}
 
-		if (currentUser != null) {
-			int option = 0;
-			while (option != 4) {
-				System.out.println("Welcome: " + currentUser.getName());
-				option = promptOptions(currentUser);
-				if (option == 0 && "super_user".equals(currentUser.getRole())) {
-					String usernameToUpdate = promptUsernameToUpdate();
-					User userToUpdate = userService.getUserByUsername(usernameToUpdate);
-					if (userToUpdate == null) {
-						System.out.println("Invalid username.");
-					} else {
-						currentUser = userToUpdate;
+				}
+				// this is my NormalUser & SuperUser cLass
+			} else {
+				int userChoice = 0;
+				System.out.println("Welcome: " + verifiedLogin.name);
+				System.out.println("---------------\n");
+				while (userChoice != 4) {
+					if ("super_user".equals(verifiedLogin.role)) {
+						superUserOption();
+						userChoice = getSuperUser(scanner);
+						if (userChoice != 4) {
+							validateUserOption(userChoice, scanner, loginID, verifiedLogin);
+						}
+
+					} else if ("normal_user".equals(verifiedLogin.role)) {
+						normalUserOptions();
+						userChoice = getValidUserData(scanner);
+						if (userChoice != 4) {
+							validateUserOption(userChoice, scanner, loginID, verifiedLogin);
+						}
 					}
-				} else if (option == 1) {
-					promptUpdateUsername(currentUser);
-				} else if (option == 2) {
-					promptUpdatePassword(currentUser);
-				} else if (option == 3) {
-					promptUpdateName(currentUser);
-				} else if (option != 4) {
-					System.out.println("Invalid input, try again");
 				}
-			}
-
-			BufferedWriter writer = null;
-			try {
-				writer = new BufferedWriter(new FileWriter("users.txt"));
-				Arrays.sort(users);
-
-				for (User user : users) {
-					writer.write(userService.getUserInfo(user));
-				}
-			} finally {
-				if (writer != null) {
-					writer.close();
-				}
+				scanner.close();
+				sortAndWriteToFile(loginID);
 			}
 		}
+	}
+
+	private static void superUserOption() {
+		System.out.println("Please choose from following options:");
+		System.out.println("(0) Login as another user:");
+		System.out.println("(1) Update username:");
+		System.out.println("(2) Update password:");
+		System.out.println("(3) Update name:");
+		System.out.println("(4) Exit:");
+	}
+
+	// this is my ValidateUser method substitute for using another class
+	private static void validateUserOption(int userLogin, Scanner scanner, List<User> loginID, User dataInput) {
+		switch (userLogin) {
+		case 0: {
+			System.out.println("Which user would you like to login?as(Type in a valid username)");
+			String username = scanner.next();
+			scanner.nextLine();
+			User loggedInUser = null;
+			for (User currentUser : loginID) {
+				if (currentUser.username.equals(username)) {
+					loggedInUser = currentUser;
+					break;
+				}
+			}
+			if (null == loggedInUser) {
+				System.out.println("Invalid User name");
+			} else {
+				int inputFromUser = 0;
+				System.out.println("Welcome: " + loggedInUser.name);
+				System.out.println("--------------\n-");
+				while (inputFromUser != 4) {
+					if ("normal_user".equals(loggedInUser.role)) {
+						normalUserOptions();
+						inputFromUser = getValidUserData(scanner);
+						if (inputFromUser != 4) {
+							validateUserOption(inputFromUser, scanner, loginID, loggedInUser);
+						}
+					}
+				}
+				scanner.close();
+				sortAndWriteToFile(loginID);
+				System.exit(0);
+			}
+			break;
+		}
+		case 1: {
+			System.out.println("Please type in ypur new username:");
+
+			String username = scanner.next();
+			if (null != username && !username.trim().isEmpty()) {
+				boolean found = false;
+				for (User customers : loginID) {
+					if (!customers.username.equals(dataInput.username) && customers.username.equals(username)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					for (User customers : loginID) {
+						if (customers.username.equals(dataInput.username)) {
+							customers.username = username;
+						}
+					}
+				}
+			}
+			break;
+		}
+		case 2: {
+			System.out.println("Please type in ypur new password:");
+			String password = scanner.next();
+			if (null != password && !password.trim().isEmpty()) {
+				for (User consumers : loginID) {
+					if (consumers.username.equals(dataInput.username)) {
+						consumers.password = password;
+					}
+				}
+			}
+			break;
+		}
+		case 3: {
+			System.out.println("Please type in your new name:");
+			String name = scanner.nextLine();
+			if (null != name && !name.trim().isEmpty()) {
+				for (User clients : loginID) {
+					if (clients.username.equals(dataInput.username)) {
+						clients.name = name;
+					}
+				}
+			}
+			break;
+		}
+		}
+	}
+
+	// my method to sort and write file
+	private static void sortAndWriteToFile(List<User> loginID) {
+		Collections.sort(loginID, new Comparator<User>() {
+			@Override
+			public int compare(User o1, User o2) {
+				return o1.username.compareTo(o2.username);
+			}
+		});
+
+		BufferedWriter bufferedWriter = null;
+		try {
+			bufferedWriter = new BufferedWriter(new FileWriter(new File("users.txt")));
+			for (User clientInput : loginID) {
+				bufferedWriter.write(clientInput.username + ", " + clientInput.password + ", " + clientInput.name + ", "
+						+ clientInput.role + "\n");
+			}
+		} catch (IOException e) {
+		} finally {
+			if (null != bufferedWriter) {
+				try {
+					bufferedWriter.close();
+				} catch (IOException e) {
+				}
+			}
+
+		}
+	}
+
+	private static int getValidUserData(Scanner scanner) {
+		int userEntry = 0;
+		while (userEntry == 0) {
+			try {
+				userEntry = Integer.valueOf(scanner.next());
+				if (userEntry < 1 || userEntry > 4) {
+					userEntry = 0;
+				}
+			} catch (Exception e) {
+				userEntry = 0;
+			}
+			if (userEntry == 0) {
+				System.out.println("Invalid choice!!!");
+			}
+		}
+		scanner.nextLine();
+		return userEntry;
+	}
+
+	private static int getSuperUser(Scanner scanner) {
+		int userAccess = -1;
+		while (userAccess == -1) {
+			try {
+				userAccess = Integer.valueOf(scanner.next());
+				if (userAccess < 0 || userAccess > 4) {
+					userAccess = -1;
+				}
+			} catch (Exception e) {
+				userAccess = -1;
+			}
+			if (userAccess == -1) {
+				System.out.println("Invalid choice!!!");
+			}
+		}
+		scanner.nextLine();
+		return userAccess;
+	}
+
+	private static void normalUserOptions() {
+		System.out.println("Please choose from following options:");
+		System.out.println("(1) Update username:");
+		System.out.println("(2) Update password:");
+		System.out.println("(3) Update name:");
+		System.out.println("(4) Exit:");
 
 	}
 }
