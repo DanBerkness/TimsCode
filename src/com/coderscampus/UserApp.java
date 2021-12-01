@@ -44,7 +44,6 @@ public class UserApp {
 			String password = scanner.next();
 			scanner.nextLine();
 
-			// this is substitute my UserService Class
 			for (User input : loginID) {
 				if (input.username.equals(username) && input.password.equals(password)) {
 					verifiedLogin = input;
@@ -58,7 +57,6 @@ public class UserApp {
 					System.out.println("Too many failed login attempts, you are now locked out.");
 
 				}
-				// this is my substitute  NormalUser & SuperUser cLass
 			} else {
 				int userChoice = 0;
 				System.out.println("Welcome: " + verifiedLogin.name);
@@ -177,7 +175,6 @@ public class UserApp {
 		}
 	}
 
-	// my method to sort and write file
 	private static void sortAndWriteToFile(List<User> loginID) {
 		Collections.sort(loginID, new Comparator<User>() {
 			@Override
