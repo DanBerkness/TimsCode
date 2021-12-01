@@ -99,11 +99,11 @@ public class UserApp {
 		switch (userLogin) {
 		case 0: {
 			System.out.println("Which user would you like to login?as(Type in a valid username)");
-			String username = scanner.next();
+			String userid = scanner.next();
 			scanner.nextLine();
 			User loggedInUser = null;
 			for (User currentUser : loginID) {
-				if (currentUser.username.equals(username)) {
+				if (currentUser.username.equals(userid)) {
 					loggedInUser = currentUser;
 					break;
 				}
