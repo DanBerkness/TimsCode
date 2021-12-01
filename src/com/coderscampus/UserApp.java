@@ -217,7 +217,7 @@ public class UserApp {
 				userEntry = 0;
 			}
 			if (userEntry == 0) {
-				System.out.println("Invalid choice!!!");
+				System.out.println("Invalid option!!!");
 			}
 		}
 		scanner.nextLine();
@@ -236,7 +236,7 @@ public class UserApp {
 				userAccess = -1;
 			}
 			if (userAccess == -1) {
-				System.out.println("Invalid choice!!!");
+				System.out.println("Invalid option!!!");
 			}
 		}
 		scanner.nextLine();
