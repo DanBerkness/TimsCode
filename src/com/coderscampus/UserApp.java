@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserApp { 
+public class UserApp {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		List<User> loginID = new ArrayList<>();
@@ -35,7 +35,7 @@ public class UserApp {
 		scanner = new Scanner(System.in);
 
 		User verifiedLogin = null;
-		int userLogins = 1;
+		int userLogins = 0;
 
 		while (verifiedLogin == null && userLogins < 5) {
 			System.out.println("Enter your email:");
@@ -45,9 +45,10 @@ public class UserApp {
 			scanner.nextLine();
 
 			for (User input : loginID) {
-				if (input.username.equals(username) && input.password.equals(password)) {
+				if (input.username.equalsIgnoreCase(username) && input.password.equalsIgnoreCase(password)) {
 					verifiedLogin = input;
 					break;
+
 				}
 			}
 			if (null == verifiedLogin) {
@@ -246,6 +247,5 @@ public class UserApp {
 		System.out.println("(2) Update password:");
 		System.out.println("(3) Update name:");
 		System.out.println("(4) Exit:");
-
 	}
 }
