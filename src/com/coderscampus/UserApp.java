@@ -96,7 +96,7 @@ public class UserApp {
 	private static void validateUserOption(int userLogin, Scanner scanner, List<User> loginID, User dataInput) {
 		switch (userLogin) {
 		case 0: {
-			System.out.println("Which user would you like to login?as(Type in a valid username)");
+			System.out.println("Which user would you like to login as? (Type in a valid username)");
 			String userid = scanner.next();
 			scanner.nextLine();
 			User loggedInUser = null;
@@ -128,7 +128,7 @@ public class UserApp {
 			break;
 		}
 		case 1: {
-			System.out.println("Please type in ypur new username:");
+			System.out.println("Please type in your new username:");
 
 			String username = scanner.next();
 			if (null != username && !username.trim().isEmpty()) {
@@ -150,7 +150,7 @@ public class UserApp {
 			break;
 		}
 		case 2: {
-			System.out.println("Please type in ypur new password:");
+			System.out.println("Please type in your new password:");
 			String password = scanner.next();
 			if (null != password && !password.trim().isEmpty()) {
 				for (User consumers : loginID) {
@@ -178,7 +178,6 @@ public class UserApp {
 
 	private static void sortAndWriteToFile(List<User> loginID) {
 		Collections.sort(loginID, new Comparator<User>() {
-			@Override
 			public int compare(User o1, User o2) {
 				return o1.username.compareTo(o2.username);
 			}
@@ -205,7 +204,7 @@ public class UserApp {
 
 	private static int getValidUserData(Scanner scanner) {
 		int userEntry = 0;
-		while (userEntry == 0) {
+		while (userEntry == 0) { 
 			try {
 				userEntry = Integer.valueOf(scanner.next());
 				if (userEntry < 1 || userEntry > 4) {
@@ -226,7 +225,7 @@ public class UserApp {
 		int userAccess = -1;
 		while (userAccess == -1) {
 			try {
-				userAccess = Integer.valueOf(scanner.next());
+				userAccess = Integer.valueOf(scanner.next()); 
 				if (userAccess < 0 || userAccess > 4) {
 					userAccess = -1;
 				}
