@@ -5,23 +5,31 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class UserApp {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		List<User> loginID = new ArrayList<>();
+		
+		ArrayList<User> loginID = new ArrayList<>();
 		Scanner scanner = new Scanner(new File("users.txt"));
+		String[] elements = new String[4];
+		User dataInput = new User();
+		
 		while (scanner.hasNext()) {
 			String line = scanner.nextLine();
 			if (null != line && !line.trim().isEmpty()) {
-				String elements[] = line.split(",");
+				elements = line.split(",");
 				if (null != elements && elements.length >= 4) {
-					User dataInput = new User();
+					dataInput = new User();
 					dataInput.username = elements[0].trim();
 					dataInput.password = elements[1].trim();
 					dataInput.name = elements[2].trim();
@@ -67,19 +75,19 @@ public class UserApp {
 						superUserOption();
 						userChoice = getSuperUser(scanner);
 						if (userChoice != 4) {
-							validateUserOption(userChoice, scanner, loginID, verifiedLogin);
+							validateUserOption(userChoice, scanner, loginID, verifiedLogin, elements);
 						}
 
 					} else if ("normal_user".equals(verifiedLogin.role)) {
 						normalUserOptions();
 						userChoice = getValidUserData(scanner);
 						if (userChoice != 4) {
-							validateUserOption(userChoice, scanner, loginID, verifiedLogin);
+							validateUserOption(userChoice, scanner, loginID, verifiedLogin, elements);
 						}
 					}
 				}
 				scanner.close();
-				sortAndWriteToFile(loginID);
+				sortAndWriteToFile(loginID, elements);
 			}
 		}
 	}
@@ -93,7 +101,7 @@ public class UserApp {
 		System.out.println("(4) Exit:");
 	}
 
-	private static void validateUserOption(int userLogin, Scanner scanner, List<User> loginID, User dataInput) {
+	private static void validateUserOption(int userLogin, Scanner scanner, ArrayList<User> loginID, User dataInput, String[] elements) {
 		switch (userLogin) {
 		case 0: {
 			System.out.println("Which user would you like to login as? (Type in a valid username)");
@@ -117,12 +125,12 @@ public class UserApp {
 						normalUserOptions();
 						inputFromUser = getValidUserData(scanner);
 						if (inputFromUser != 4) {
-							validateUserOption(inputFromUser, scanner, loginID, loggedInUser);
+							validateUserOption(inputFromUser, scanner, loginID, loggedInUser, elements);
 						}
 					}
 				}
 				scanner.close();
-				sortAndWriteToFile(loginID);
+				sortAndWriteToFile(loginID, elements);
 				System.exit(0);
 			}
 			break;
@@ -176,17 +184,38 @@ public class UserApp {
 		}
 	}
 
-	private static void sortAndWriteToFile(List<User> loginID) {
-		Collections.sort(loginID, new Comparator<User>() {
-			public int compare(User o1, User o2) {
-				return o1.username.compareTo(o2.username);
+	private static void sortAndWriteToFile(ArrayList<User> loginID, String[] elements, User dataInput) {
+		
+		
+		for(User validUser : loginID) {
+			if(validUser.role.equals("super_user")) {
+				SuperUser superUser = new SuperUser(validUser.username, validUser.password, validUser.name, validUser.role);
+				ArrayList<SuperUser> superUsers = new ArrayList<>();
+				superUsers.addAll(superUsers);
+				Arrays.sort(elements);
+				
+//				Collections.sort(superUsers, new Comparator<User>() {
+//					public int compare(User o1, User o2) {
+//							return o1.role.compareTo(o2.role);
+//						
+//					}
+//				});
+				
+			} else if (validUser.role.equals("normal_user")) {
+				Arrays.sort(elements);
+//				Collections.sort(loginID, new Comparator<User>() {
+//					public int compare(User o1, User o2) {
+//						return o1.username.compareTo(o2.username);
+//					}
+//				});
 			}
-		});
+			
+		}
 
 		BufferedWriter bufferedWriter = null;
 		try {
 			bufferedWriter = new BufferedWriter(new FileWriter(new File("users.txt")));
-			for (User clientInput : loginID) {
+			for (User clientInput : elements) {
 				bufferedWriter.write(clientInput.username + ", " + clientInput.password + ", " + clientInput.name + ", "
 						+ clientInput.role + "\n");
 			}
